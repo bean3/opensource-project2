@@ -24,8 +24,7 @@
   <script src="js/card_js/toastr.min.js"></script>
   <script src="js/card_js/ajaxable.min.js"></script>
 
-  <script src="js/card_js/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.min.js"></script>
+  <script src="https://unpkg.com/html2canvas@1.0.0-alpha.4/dist/html2canvas.min.js"></script>
 
 </head>
 
@@ -308,7 +307,7 @@
             <table class="c1766">
               <tr>
                 <td class="cell c1769">
-                  <img class="c926" src="https://artf.github.io/grapesjs/img/grapesjs-logo.png" alt="GrapesJS."/>
+                  <img crossorigin="anonymous" class="c926" src="https://artf.github.io/grapesjs/img/grapesjs-logo.png" alt="GrapesJS."/>
                 </td>
                 <td class="cell c1776">
                   <div class="c1144">GrapesJS Newsletter Builder
@@ -320,7 +319,7 @@
             <table class="card">
               <tr>
                 <td class="card-cell">
-                  <img class="c1271" src="https://artf.github.io/grapesjs/img/tmp-header-txt.jpg" alt="Big image here"/>
+                  <img crossorigin="anonymous" class="c1271" src="https://artf.github.io/grapesjs/img/tmp-header-txt.jpg" alt="Big image here"/>
                   <table class="table100 c1357">
                     <tr>
                       <td class="card-content">
@@ -349,7 +348,7 @@
                   <table class="list-item-content">
                     <tr class="list-item-row">
                       <td class="list-cell-left">
-                        <img class="list-item-image" src="https://artf.github.io/grapesjs/img/tmp-blocks.jpg" alt="Image1"/>
+                        <img crossorigin="anonymous" class="list-item-image" src="https://artf.github.io/grapesjs/img/tmp-blocks.jpg" alt="Image1"/>
                       </td>
                       <td class="list-cell-right">
                         <h1 class="card-title">Built-in Blocks
@@ -368,7 +367,7 @@
                   <table class="list-item-content">
                     <tr class="list-item-row">
                       <td class="list-cell-left">
-                        <img class="list-item-image" src="https://artf.github.io/grapesjs/img/tmp-tgl-images.jpg" alt="Image2"/>
+                        <img crossorigin="anonymous" class="list-item-image" src="https://artf.github.io/grapesjs/img/tmp-tgl-images.jpg" alt="Image2"/>
                       </td>
                       <td class="list-cell-right">
                         <h1 class="card-title">Toggle images
@@ -387,7 +386,7 @@
                   <table class="grid-item-card">
                     <tr>
                       <td class="grid-item-card-cell">
-                        <img class="grid-item-image" src="https://artf.github.io/grapesjs/img/tmp-send-test.jpg" alt="Image1"/>
+                        <img crossorigin="anonymous" class="grid-item-image" src="https://artf.github.io/grapesjs/img/tmp-send-test.jpg" alt="Image1"/>
                         <table class="grid-item-card-body">
                           <tr>
                             <td class="grid-item-card-content">
@@ -406,7 +405,7 @@
                   <table class="grid-item-card">
                     <tr>
                       <td class="grid-item-card-cell">
-                        <img class="grid-item-image" src="https://artf.github.io/grapesjs/img/tmp-devices.jpg" alt="Image2"/>
+                        <img crossorigin="anonymous" class="grid-item-image" src="https://artf.github.io/grapesjs/img/tmp-devices.jpg" alt="Image2"/>
                         <table class="grid-item-card-body">
                           <tr>
                             <td class="grid-item-card-content">
@@ -449,7 +448,7 @@
 
   <div style="display: none">
     <div class="gjs-logo-cont">
-      <a href="https://grapesjs.com"><img class="gjs-logo" src="img/grapesjs-logo-cl.png"></a>
+      <a href="https://grapesjs.com"><img crossorigin="anonymous" class="gjs-logo" src="img/grapesjs-logo-cl.png"></a>
       <div class="gjs-logo-version"></div>
     </div>
   </div>
@@ -582,9 +581,28 @@
       className: 'fa fa-cloud-download',
       attributes: {title: 'ExportImage'},
       command: function(){
-        html2canvas(document.querySelector(".gjs-cv-canvas")).then(canvas => {
-          saveAs(canvas.toDataURL(), 'canvas.png');
+
+      	var ele = document.querySelector(".gjs-frame").contentDocument.body;
+
+      	// need to solve CORS :D
+    	html2canvas(ele,{
+			allowTaint: true,
+			logging: true
+    	}).then(canvas => {
+			document.body.appendChild(canvas);
+
+    		var link = document.createElement('a');
+			link.href = uri;
+			link.download = filename;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+
+			document.body.removeChild(canvas);
+
+          //saveAs(canvas.toDataURL(), 'canvas.png');
         });
+        
         alert("export!"); 
       }
     }]);
