@@ -628,7 +628,6 @@
 
       	// need to solve CORS :D
     	html2canvas(ele,{
-			allowTaint: true,
 			logging: true
     	}).then(canvas => {
 			let contentBox = document.querySelector("#downloadModal .modal-body");
